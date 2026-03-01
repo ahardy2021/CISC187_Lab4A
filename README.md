@@ -15,46 +15,118 @@ $O(\frac{n^2 + n}4) = O(n^2)$, thus average complexity is $O(n^2)$.
 I'm a little unclear on where we would need to demonstrate operations or show a diagram
 given that this is a strictly mathematical proof, so I'll omit them.
 
-2. I don't know why this question is worded in the way it is; it is currently factually incorrect.
-Verbatim from the assignment:
-> At the start of the insertion sort, the index of the inspected value is set to 1.
-> Change the index of the inspected value and verify that the total number of operations equals 20.
-> Consider the worst case scenario. Use N=5, where N is the number of elements.
-The first part of this question is trivally disprovable for an array of 5 elements.
-Suppose I set `i = 10`. Then the pseudocode becomes:
-```pseudocode
-i := 10
-while i < len(A)
-|	j := i
-|	while j > 0 && A[j-1] > A[j]
-|	|	swap A[j] A[j-1]
-|	|	j := j-1
-|	i := i + 1
+2. Question below.
+> Insertion sort normally begins with `i = 1`. Let `N = 5` and assume the array is in descending order (worst case).
+> Count operations where:
+> * Comparison = `A[j] > key`
+> * Shift = `A[j+1] = A[j]`
+```cpp
+template <typename T>
+constexpr bool compare(T a, T b) {return a > b;}
+
+/*template <typename T>
+constexpr void shift(T a[], size_t j) {a[j+1] = a[j];}
+*/
+
+template<typename T>
+void swap(T &a, T &b) {
+	T _ = a;
+	a = b;
+	b = _;
+} // implies SHIFT operation. written like this because SHIFT is harder to use
+
+
+const void insertionSort(T arr[len]) {
+	for (size_t i = 1; i < len; i++) {
+		for (size_t j = i; j > 0; j--) {
+			if compare(arr[j] arr[j-1])
+				swap(arr[j], arr[j-1]);
+			else break;
+		}
+	}
+}
+
+int toBeSorted[5] = {5,4,3,2,1};
 ```
-Let's step through line by line:
-`i := 10`: 1 operation
-`while i < len(A)`: 1 operation, false, don't loop.
-We have done a total of two operations. This is not equal to twenty,
-assuming the entire prompt is looking for one question.
+> a) Start the algorithm at `i = 1`. Verify the total operations = 20.
+```
+NOTE: swap = one SHIFT operation.
 
-
-I will consider the worst-case scenario on its own, though, 
-similarly to what I did above, with no code and only math.
-
-Let $A = [A_0, A_1, \dots, A_{N-1}]$. Then $|A| = N$ ($A$ has $N$ elements).
-
-Then for a valid $A_n$, $A_n$ can be swapped up to (and will be swapped exactly, in the worst case) $n$ times.
-This produces the sum $\sum \limits_{n=1}^{N-1} n$, which simplies to $\frac{(N-1)^2 + (N-1)}{2}$.
-
-If $N = 5$, then there are $\frac{4^2 + 4}{2} = \frac{20}{2} = 10$ swap operations.
-This is not equal to 20 either.
-
-If we count operations upon `j`, we find an answer of 20 operations,
-but we would also categorically need to include operations on `i`, 
-since `i` and `j` are of the same type. This would produce $20 + 2 \times 4 = 28$ total operations,
-which is also not what the question states.
-
-I'm unsure of what this question was asking, but I hope this in-depth response was sufficient.
+i = 1 | arr = {5,4,3,2,1} | ops = 0
+compare(5,4) -> true
+	swap([1],[0])
+i = 2 | arr = {4,5,3,2,1} | ops = 2
+compare(5,3) -> true
+	swap([2],[1])
+compare(4,3) -> true
+	swap([1],[0])
+i = 3 | arr = {3,4,5,2,1} | ops = 6
+compare(5,2) -> true
+	swap([3],[2])
+compare(4,2) -> true
+	swap([2],[1])
+compare(3,2) -> true
+	swap([1],[0])
+i = 4 | arr = {2,3,4,5,1} | ops = 12
+compare(5,1) -> true
+	swap([4],[3])
+compare(4,1) -> true
+	swap([3],[2])
+compare(3,1) -> true
+	swap([2],[1])
+compare(2,1) -> true
+	swap([1],[0])
+i = 5 | arr = {1,2,3,4,5} | ops = 20
+```
+> b) Start the algorithm at `i = 2`, then `i = 3`. Count operations again.
+```
+i = 2 | arr = {5,4,3,2,1} | ops = 0
+compare(4,3) -> true
+	swap([2],[1])
+compare(5,3) -> true
+	swap([1],[0])
+i = 3 | arr = {3,5,4,2,1} | ops = 4
+compare(4,2) -> true
+	swap([3],[2])
+compare(5,2) -> true
+	swap([2],[1])
+compare(3,2) -> true
+	swap([1],[0])
+i = 4 | arr = {2,3,5,4,1} | ops = 10
+compare(4,1) -> true
+	swap([4],[3])
+compare(5,1) -> true
+	swap([3],[2])
+compare(3,1) -> true
+	swap([2],[1])
+compare(2,1) -> true
+	swap([1],[0])
+i = 5 | arr = {1,2,3,5,4} | ops = 18
+```
+Total operations = 18.
+```
+i = 3 | arr = {5,4,3,2,1} | ops = 0
+compare(3,2) -> true
+	swap([3],[2])
+compare(4,2) -> true
+	swap([2],[1])
+compare(5,2) -> true
+	swap([1],[0])
+i = 4 | arr = {2,5,4,3,1} | ops = 6
+compare(3,1) -> true
+	swap([4],[3])
+compare(4,1) -> true
+	swap([3],[2])
+compare(5,1) -> true
+	swap([2],[1])
+compare(2,1) -> true
+	swap([1],[0])
+i = 5 | arr - {1,2,5,4,3} | ops = 14
+```
+Total operation = 14.
+> c) For (b), does the algorithm still sort the entire array? Explain.
+No, the algorithm didn't do the necessary work to sort the start of the array first,
+so the end of the array remains unsorted.
 
 3. I'm going to copy in the function to here as pseudocode rather than javascript.
 ```pseudocode

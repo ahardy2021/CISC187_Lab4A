@@ -1,3 +1,8 @@
+NOTE: I don't know why Github hates embeded TeX.
+This works fine when I preview it in Obsidian, (Markdown-based notes application I use for class),
+but breaks horribly on GitHub. If you know how to write TeX, this shouldn't be too hard to read anyways,
+so I'm not going to spend time fixing it.
+
 1. Suppose we have an array a, with elements $a_0 \dots a_{k-1}$, with length k.
 
 Average case could be interpreted to mean that each element would need,
@@ -6,8 +11,8 @@ on average, halfway between the maximum possible operations and the minimum poss
 A given element $a_n$ could require as few as 0 operations, if it is the largest element that has been viewed thusfar,
 or up to n operations, if it is the smallest element that has been viewed thusfar.
 
-Expressing this as an algebraic sum, we have $\sum\limits_{n=0}^{k-1} (0 + n)\div 2$
-And we can pull out some terms from the sum using basic algebra, giving us $\frac 12 \sum \limits _{n=0} ^{k-1} n$
+Expressing this as an algebraic sum, we have $\sum\limits_{n=0}^{k-1} (0 + n)\div 2$,
+and we can pull out some terms from the sum using basic algebra, giving us $\frac 12 \sum \limits _{n=0} ^{k-1} n$.
 
 Using known rules for sums we can turn this into $\frac 12 \frac{n^2 + n}2 = \frac{n^2 + n}4$
 $O(\frac{n^2 + n}4) = O(n^2)$, thus average complexity is $O(n^2)$.

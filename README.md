@@ -1,4 +1,4 @@
-NOTE: I don't know why Github hates embeded TeX.
+NOTE: I don't know why Github hates embedded TeX.
 This works fine when I preview it in Obsidian, (Markdown-based notes application I use for class),
 but breaks horribly on GitHub. If you know how to write TeX, this shouldn't be too hard to read anyways,
 so I'm not going to spend time fixing it.

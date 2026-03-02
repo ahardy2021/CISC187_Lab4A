@@ -28,12 +28,15 @@ To push back $a_n$ by $s$ positions, if we generalize the "k-rotate" pattern to 
 then we need to execute $s+2$ write operations. An optimization is possible for the rotate-zero case, but is ignored
 for the sake of simplicity; it shouldn't be too difficult to implement this on one's own and see the overall impact.
 
-Thus, we will need, for a given element, on average, $\sum _{s=0}^{n-1} (s+1)+(s+2) \div n = (\sum_{s=0}^{n-1} 2s+3)\div n$ operations.
+Thus, the operations we will need on average, for a given element, comes out to:
+
+$$\sum _{s=0}^{n-1} ((s+1) + (s+2)) \div n = \left(\sum_{s=0}^{n-1} 2s+3\right)\div n$$
+
 This is a well-documented triangular sum, which simplifies to $\frac{2(n)(n-1) + 6(n-1)}{2n}$, or $\frac{2n^2 + 4n - 3}{2n}$.
 
 We will simplify this to $n + 2$ operations and drop the $-\frac3{2n}$ term. We must now sum over the whole array that can be sorted:
 
-$$\sum\limits_{n=1}^{k-1} n+2 = \frac{k(k-1) + 4k - 8}{2} = \frac{k^2 + 3k - 8}{2}$$.
+$$\sum\limits_{n=1}^{k-1} n+2 = \frac{k(k-1) + 4k - 8}{2} = \frac{k^2 + 3k - 8}{2}$$
 
 Big-O notation of the above comes out to $O(k^2)$.
 
@@ -102,6 +105,7 @@ compare(2,1) -> true
 	swap([1],[0])
 i = 5 | arr = {1,2,3,4,5} | ops = 20
 ```
+Total operations = 20.
 > b) Start the algorithm at `i = 2`, then `i = 3`. Count operations again.
 ```
 i = 2 | arr = {5,4,3,2,1} | ops = 0
@@ -149,8 +153,9 @@ i = 5 | arr - {1,2,5,4,3} | ops = 14
 ```
 Total operations = 14.
 > c) For (b), does the algorithm still sort the entire array? Explain.
+
 No, the algorithm didn't do the necessary work to sort the start of the array first,
-so the end of the array remains unsorted.
+so some elements of the array are out of order.
 
 3. 
 > The following function returns whether capital 'X' is present in a string.
@@ -162,11 +167,15 @@ bool hasX(str)
 |	|	|	foundX := true
 |	return foundX
 ```
-	1. What is this code's time complexity regarding big O notation?
+
+> a. What is this code's time complexity regarding big O notation?
+
 Time complexity should be consistent $O(N)$ best/average/worst hit/miss.
-	2. Then, modify the code to improve the algorithm's efficiency for best- and average-cases.
+
+> b. Then, modify the code to improve the algorithm's efficiency for best- and average-cases.
+
 I can't actually make any case aside from an improvement to $O(1)$ for best hit,
-but average hit could improve further by the same method of early return.
+but average hit could improve within its notation by the same method of early return.
 ```pseudocode
 bool hasX(str)
 |	for i := 0; i < len str; i := i + 1
